@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd">
+	<flow name="documentstorageFlow" doc:id="946ca61d-4d45-494b-86c6-3a711af253b5" >
+		<flow-ref doc:name="oauth-token-cache-configFlow" doc:id="96af9497-dd77-4891-ba02-499d8b2a156e" name="oauth-token-cache-configFlow" target="oauth_access_token" targetValue="#[payload.access_token]" />
+		<ee:transform xsi:schemaLocation=" http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="da43527e-18e9-4a10-ab5b-977e82fcb25f">
+            <ee:message>
+                <ee:set-payload><![CDATA[output application/json
+---
+{
+	SourceIdentifierId: payload.SourceIdentifierId,
+	DocumentSource: payload.DocumentSource,
+	DocumentType: payload.DocumentType,
+	DocumentExtension: payload.DocumentExtension,
+	DocumentContent: payload.DocumentContent,
+	AccountNumber: payload.AccountNumber,
+	CustomerNumber: payload.CustomerNumber,
+	CustomerName: payload.CustomerName,
+	TaxIdNo: payload.TaxIdNo,
+	DocumentDate: payload.DocumentDate,
+	RequestUUID: payload.RequestUUID
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <set-variable value='#[vars.httpmethodval ++ ":" ++ "https://${host}:${port}{documentstorageservice.sendsubmission}"]' doc:name="endPointUrl" doc:id="b6a7661d-ddbd-433e-a1f5-f03158dc4cbb" variableName="endpointurl" />
+		<json-logger:logger doc:name="Logger" doc:id="517ebe3c-9597-40dc-b304-d68f2ccce1c2" config-ref="JSON_Logger_Config" priority="DEBUG" tracePoint="PRINT" message="Request Log" endpoint="#[vars.endpointurl]">
+            <json-logger:content><![CDATA[#[output application/json ---
+{
+ 	payload:payload
+}]]]></json-logger:content>
+        </json-logger:logger>
+        <json-logger:logger doc:name="Logger" doc:id="fe91cd4c-d059-4852-970f-b84cb1fb8807" config-ref="JSON_Logger_Config" tracePoint="BEFORE_REQUEST" message="BEFORE_REQUEST" endpoint="#[vars.endpointurl]" status="#[vars.'httpStatus']">
+            <json-logger:content><![CDATA[#[output application/json ---
+{
+	vars: vars,
+ 	attributes: attributes
+}]]]></json-logger:content>
+        </json-logger:logger>
+        <http:request method="POST" doc:name="SendSubmissionRequest" doc:id="d30fd909-a8e8-46ad-b928-167d085b16a6" path="${documentstorageservice.sendsubmission}" config-ref="HTTP_Request_configuration_OpenAPI">
+            <http:headers><![CDATA[#[output application/java
+---
+{
+	"Authorization" : "bearer " ++ vars.oauth_access_token,
+	"Content-Type" : "application/json",
+	"RequestUuid" : vars.RequestUuid
+}]]]></http:headers>
+        </http:request>
+        <json-logger:logger doc:name="Logger" doc:id="6913d145-559f-49db-8dc8-0f13cff5b78d" config-ref="JSON_Logger_Config" tracePoint="AFTER_REQUEST" message="AFTER_REQUEST" endpoint="#[vars.endpointurl]" status="#[vars.'httpStatus']">
+            <json-logger:content><![CDATA[#[output application/json ---
+{
+	vars: vars,
+ 	attributes: attributes
+}]]]></json-logger:content>
+        </json-logger:logger>
+        <json-logger:logger doc:name="Logger" doc:id="be885346-d641-4aeb-8062-75a957c7f47f" config-ref="JSON_Logger_Config" priority="DEBUG" tracePoint="PRINT" message="Response Log" endpoint="#[vars.endpointurl]" status="#[vars.'httpStatus']">
+            <json-logger:content><![CDATA[#[output application/json ---
+{
+ 	payload:payload
+}]]]></json-logger:content>
+        </json-logger:logger>
+        <ee:transform doc:name="Transform Message" doc:id="27a9fb05-af90-4973-b9f9-ae892d77c705">
+            <ee:message>
+                <ee:set-payload><![CDATA[output application/json
+---
+{
+	RequestUUID: payload.RequestUUID,
+	ErrorMessageList: payload.ErrorMessageList map ( errorMessageList , indexOfErrorMessageList ) -> {
+		ErrorMessageText: errorMessageList.ErrorMessageNumber,
+		ErrorMessageNumber: errorMessageList.ErrorMessageText
+	}
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <set-payload value="#[payload]" doc:name="Set Payload" doc:id="1935a621-363a-4e46-8cfa-f2d651e5b377" />
+	</flow>
+</mule>

@@ -1,0 +1,29 @@
+
+port: "443"
+host: "openapiservices.eastwestbank.com"  
+
+documentstorageservice:
+  sendsubmission: "/DocumentStorageServiceQa/api/documentstorage/documents"
+creditcheckservice:
+  create: "/CreditCheckServiceQA/api/creditcheck/evaluation"
+  update: "/CreditCheckServiceQA/api/creditcheck/evaluation"     
+  status: "/CreditCheckServiceQA/api/creditcheck/evaluationstatus"
+azure:
+  creditcard: 
+    host: "ewaz-st01-usw2-vfa-cust-ownd-prds.azurewebsites.net"
+    code: "Xb3TYLUh0pymeEGUaDh2zV2OMkhc6I5tYC2IwtW8lXLoVFBdTtEPCw=="
+    getstatus: "/api/ApplicationStatuses/cis/{customernumber}"      
+
+oauth:
+  client_id: "0oafrugzxgW0B12gi0h7"
+  client_secret: "zUvE0odekcivaeI8Uyxm323Kb2De_hzMntu1tccV"
+  token_url: "https://sso-test.velobank.com/oauth2/ausf2c18qqtmGHyX80h7/v1/token"
+  host: "sso-test.velobank.com"
+  path: "/oauth2/ausf2c18qqtmGHyX80h7/v1/token"
+  expiry_duration_sec: "230"
+     
+json:
+  logger:
+    application:
+      name: ${project.name}
+      version: ${project.version}

@@ -1,0 +1,107 @@
+{
+  "Application": {
+	"ApplicationNumber": "",
+    "ApplicationSource": "VELOOnline",
+    "ProductCode": "VPL",
+    "AmountRequested": "0",
+    "SecuredCardDepositAcctNum": "23232323",
+    "TsandCsCardAgreementInd": true,
+    "TsandCsDepositAgreementInd": true,
+    "TsandCsCardAgreementTimestamp": "2019-12-15T08:00:00",
+    "TsandCsDepositAgreementTimestamp": "2019-12-15T08:00:00",
+    "DoNotBankFlag": false,
+    "MailingAddressIndicator": false
+  },
+  "Applicant": {
+    "CxArrayIndex": 1,
+    "ApplicantType": "Primary",
+    "SSN": "666252876",
+    "DateofBirth": "1989-09-22",
+    "AnnualSalary": 95000,
+    "OtherIncome": 8000,
+    "MthlyHousingPymt": 7000,
+    "HousingStatus": "Own",
+    "OtherMthlyObligations": 6000,
+    "AnnualGrossIncome": 9000,
+    "DisposableMthlyIncome": 66,
+    "CISNumber": "12345",
+    "CISOldestActiveDPAcctOpenDate": "2010-02-01",
+    "CISAllDPAcctsTotalCurrentBalance": 9000,
+    "CISAllDPAcctsAverageBalance": 600,
+    "ADDR": [
+      {
+        "CxArrayIndex": 1,
+        "AddressType": "Home",
+        "HouseNumber": "13520",
+        "PreDirectional": "",
+        "StreetName": "Myrtle",
+        "StreetType": "none",
+        "PostDirectional": "",
+        "Unit": "none",
+        "City": "Chino",
+        "State": "CA",
+        "Country": "",
+        "Postcode": "91708",
+        "YearsAtAddress": 2,
+        "MonthsAtAddress": 4
+      }
+    ],
+    "CONT": [
+      {
+        "CxArrayIndex": 1,
+        "PhoneType": "Phone",
+        "PhoneNumber": "2323232323",
+        "EmailAddress": "none"
+      }
+    ],
+    "EMP": [
+      {
+        "CxArrayIndex": 1,
+        "Type": "Employed",
+        "Occupation": "SD",
+        "Name": "NameTest",
+        "AddressLine1": "Addr1",
+        "AddressLine2": "Addr2",
+        "City": "El Monte",
+        "State": "CA",
+        "Postcode": "91731",
+        "PhoneNumber": "2323232323",
+        "YearsWithEmployer": 4,
+        "MonthsWithEmployer": 5
+      }
+    ],
+    "IDNT": [
+      {
+        "CxArrayIndex": 1,
+        "IDType": "DriversLicense",
+        "IDDescription": "USCitizen",
+        "IDCountry": "USA",
+        "IDState": "CA",
+        "IDIssueDate": "2017-09-22T02:56:51.426Z",
+        "IDExpiration": "2020-09-22T02:56:51.426Z",
+        "IDNumber": "232323"
+      }
+    ],
+    "NME": [
+      {
+        "CxArrayIndex": 1,
+        "NameType": "",
+        "Title": "",
+        "FirstName": "MARIA",
+        "LastName": "GONZALEZ",
+        "MiddleName": "Mr",
+        "Suffix": "",
+        "MotherMaidenName": "Rai"
+      }
+    ],
+    "ASST": [
+      {
+        "CxArrayIndex": 1,
+        "AssetInstitutionName": "EWB",
+        "AssetAmount": 123450,
+        "AssetAccountType": "Checking"
+      }
+    ]
+  },
+  "RequestUUID": "6f5ff7fa-454f-4c36-b861-bef2c7823f30"
+}

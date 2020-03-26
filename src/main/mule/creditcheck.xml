@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="createNewCreaditEvaluation" doc:id="79b2c9aa-fc8d-4f66-99db-591d9bf6af19" >
+	<flow-ref doc:name="oauth-token-cache-configFlow" doc:id="c4c4f289-ea48-420d-bf15-af2cd4f0ae45" name="oauth-token-cache-configFlow" target="oauth_access_token" targetValue='#["Bearer " ++ payload.access_token]' />
+		<ee:transform doc:name="Transform Message" doc:id="e2dc2e25-3564-4a02-9751-bf549f14fb00" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="retrycount" ><![CDATA[%dw 2.0
+output application/java
+---
+if(attributes.headers.retryCount == null)
+(0)
+else
+(attributes.headers.retryCount)]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<set-variable value='#[vars.httpmethodval ++ ":" ++ "https://${host}:${port}${creditcheckservice.create}"]' doc:name="endPointUrl" doc:id="3bc417fe-1a96-4b16-ad14-ce83239fff18" variableName="endpointurl" />
+		<json-logger:logger doc:name="Logger" doc:id="065e0fbf-e407-4536-baf3-80b1c2021200" config-ref="JSON_Logger_Config" priority="DEBUG" tracePoint="PRINT" message="Request Log" endpoint="#[vars.endpointurl]">
+			<json-logger:content ><![CDATA[#[output application/json ---
+{
+ 	payload: payload
+}]]]></json-logger:content>
+		</json-logger:logger>
+		<json-logger:logger doc:name="Logger" doc:id="0d23ca76-e323-4fd3-a038-2b7e4edb4ecb" config-ref="JSON_Logger_Config" tracePoint="BEFORE_REQUEST" endpoint="#[vars.endpointurl]" message="BEFORE_REQUEST"/>
+		<http:request method="POST" doc:name="CreateCreditEvaluationRequest" doc:id="1ab76797-cf1a-4f6d-8c69-e829588bc8e9" config-ref="HTTP_Request_configuration_OpenAPI" path='#["${creditcheckservice.create}?retryCount=" ++ vars.retrycount]' responseTimeout="55000">
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"Authorization" : vars.oauth_access_token,
+	"RequestUuid" : vars.RequestUuid
+}]]]></http:headers>
+		</http:request>
+	
+		<json-logger:logger doc:name="Logger" doc:id="83d9397b-5b30-45d8-8b48-82e13b2718b6" endpoint="#[vars.endpointurl]" status="#[vars.'httpStatus']" config-ref="JSON_Logger_Config" tracePoint="AFTER_REQUEST" message="AFTER_REQUEST"/>
+		<json-logger:logger doc:name="Logger" doc:id="a5843a52-7d61-4845-8d0a-b1b344afe359" endpoint="#[vars.endpointurl]" status="#[vars.'httpStatus']" config-ref="JSON_Logger_Config" priority="DEBUG" tracePoint="PRINT" message="Response Log">
+			<json-logger:content ><![CDATA[#[output application/json ---
+{
+ 	payload: payload
+}]]]></json-logger:content>
+		</json-logger:logger>
+	</flow>
+	<flow name="updateNewCreaditEvaluation" doc:id="b27f0521-88a6-431b-a68f-06e14e6eefa8" >
+		<flow-ref doc:name="oauth-token-cache-configFlow" doc:id="233cb66e-dae7-4a9f-bd85-5bcc2b01e8c2" name="oauth-token-cache-configFlow" target="oauth_access_token" targetValue='#["Bearer " ++ payload.access_token]' />
+		<set-variable value='#[vars.httpmethodval ++ ":" ++ "https://${host}:${port}${creditcheckservice.update}"]' doc:name="endPointUrl" doc:id="e20ffedf-d208-4310-a1c9-62eec6e4e68a" variableName="endpointurl" />
+		<json-logger:logger doc:name="Logger" doc:id="1c00d48c-d86f-42eb-8ffa-924e9725fb26" config-ref="JSON_Logger_Config" priority="DEBUG" tracePoint="PRINT" endpoint="#[vars.endpointurl]" message="Request Log">
+			<json-logger:content><![CDATA[#[output application/json ---
+{
+ 	payload: payload
+}]]]></json-logger:content>
+		</json-logger:logger>
+		<json-logger:logger doc:name="Logger" doc:id="6280997d-c238-4334-b943-5c7e797ef32a" config-ref="JSON_Logger_Config" tracePoint="BEFORE_REQUEST" endpoint="#[vars.endpointurl]" message="BEFORE_REQUEST" />
+		<http:request method="PUT" doc:name="updateCreditEvaluationRequest" doc:id="029a2f4e-9195-4710-a20c-436b7976dc02" config-ref="HTTP_Request_configuration_OpenAPI" path="${creditcheckservice.update}" responseTimeout="55000">
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"Authorization" : vars.oauth_access_token,
+	"RequestUuid" : vars.RequestUuid
+}]]]></http:headers>
+		</http:request>
+		<json-logger:logger doc:name="Logger" doc:id="d07382a0-8641-4246-b741-fc01a8479ef5" config-ref="JSON_Logger_Config" tracePoint="AFTER_REQUEST" endpoint="#[vars.endpointurl]" status="#[vars.'httpStatus']" message="AFTER_REQUEST" />
+		<json-logger:logger doc:name="Logger" doc:id="d75a2724-276e-423c-a212-864486104066" config-ref="JSON_Logger_Config" priority="DEBUG" tracePoint="PRINT" endpoint="#[vars.endpointurl]" status="#[vars.'httpStatus']" message="Response Log" >
+			<json-logger:content ><![CDATA[#[output application/json ---
+{
+ 	payload: payload
+}]]]></json-logger:content>
+		</json-logger:logger>
+	
+</flow>
+	
+	<flow name="creditcheckStatusFlow" doc:id="53629430-7b74-4c9b-b643-9c682a1960cb" >
+		<set-variable value='#[vars.httpmethodval ++ ":" ++ "https://${azure.creditcard.host}:${port}${azure.creditcard.getstatus}?code=${azure.creditcard.code}"]' doc:name="endPointUrl" doc:id="e14cb9ac-fe00-4c2e-962f-9a2ad095bdc5" variableName="endpointurl" />
+		<json-logger:logger doc:name="Logger" doc:id="49c18de7-ae6a-47fb-a72e-43761fa88af8" config-ref="JSON_Logger_Config" priority="DEBUG" tracePoint="PRINT" endpoint='#[vars.endpointurl]' message="Request Log">
+			<json-logger:content><![CDATA[#[output application/json ---
+{
+ 	
+}]]]></json-logger:content>
+		</json-logger:logger>
+		<json-logger:logger doc:name="Logger" doc:id="9d20a811-4635-48fd-b7e5-a6e42097bdd2" config-ref="JSON_Logger_Config" tracePoint="BEFORE_REQUEST" endpoint='#[vars.endpointurl]' message="BEFORE_REQUEST" />
+		<http:request method="GET" doc:name="GET Credit Evaluation Status Request" doc:id="bc1398c7-1641-4b6f-9444-f197cb3ff38d" config-ref="AzureCreditCard" path='#["${azure.creditcard.getstatus}"]' responseTimeout="55000">
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"RequestUuid" : vars.RequestUuid
+}]]]></http:headers>
+			<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"customernumber" : attributes.uriParams.customernumber
+}]]]></http:uri-params>
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"code" : "${azure.creditcard.code}"
+}]]]></http:query-params>
+		</http:request>
+		<json-logger:logger doc:name="Logger" doc:id="d04117fa-7c4d-4047-a6dc-212f28c55db5" config-ref="JSON_Logger_Config" tracePoint="AFTER_REQUEST" endpoint='#[vars.endpointurl]' status="#[vars.'httpStatus']" message="AFTER_REQUEST" />
+		<json-logger:logger doc:name="Logger" doc:id="5c5021d8-2cb6-463e-a247-51ea28b3e991" config-ref="JSON_Logger_Config" priority="DEBUG" tracePoint="PRINT" endpoint='#[vars.endpointurl]' status="#[vars.'httpStatus']" message="Response Log" >
+			<json-logger:content ><![CDATA[#[output application/json ---
+{
+ 	payload: payload
+}]]]></json-logger:content>
+		</json-logger:logger>
+	</flow>
+</mule>

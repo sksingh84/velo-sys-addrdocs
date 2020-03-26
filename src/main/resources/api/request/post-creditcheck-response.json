@@ -1,0 +1,66 @@
+{
+  "Application": {
+    "ApplicationNumber": "000000000023111",
+    "ApplicationCreationDate": "10/16/2019 12:00:00 AM",
+    "ApplicationCreationTime": "18:15:42:641",
+    "ApplicationUpdateDate": "10/16/2019 12:00:00 AM",
+    "ApplicationUpdateTime": "18:15:43:411",
+    "ApplicationStatus": "Declined",
+    "ServiceID": "NewCreditEvaluation",
+    "ProcessStage": "1",
+    "Version": "r1001",
+    "VersionDate": "9/19/2019 12:00:00 AM",
+    "ProductCode": "VPL",
+    "AmountRequested": "0.00",
+    "PreBRdmNbr1": "-1",
+    "PreBRdmNbr2": "-1",
+    "PreBRdmNbr3": "-1",
+    "PreBRdmNbr4": "-1",
+    "PreBRdmNbr5": "-1",
+    "PstBRdmNbr1": "-1",
+    "PstBRdmNbr2": "-1",
+    "PstBRdmNbr3": "-1",
+    "PstBRdmNbr4": "-1",
+    "PstBRdmNbr5": "-1",
+    "RequestID": "6f5ff7fa-454f-4c36-b861-bef2c7823f30",
+    "DecisionDate": "2019-10-16T00:00:00",
+    "DecisionTime": "18:15:43:406"
+  },
+  "Results": {
+    "PrBR": {
+      "PreBRdmNbr1": "977",
+      "PreBRdmNbr2": "759",
+      "PreBRdmNbr3": "944",
+      "PreBRdmNbr4": "518",
+      "PreBRdmNbr5": "351"
+    },
+    "PrBS": {
+      "PreBPolicyDecSetter": {
+        "PolicyDecisionText": "Declined",
+        "PolicyDecisionCategory": "Declined",
+        "PolicySortedRsnCodeTbl": [
+          {
+            "CxArrayIndex": 1,
+            "Value": "P003"
+          }
+        ]
+      },
+      "PreBEdition": {
+        "PreBPolicyEditionNumber": "v1001",
+        "PreBPolicyEditionCreationDate": "2019-09-26T00:00:00",
+        "PreBPolicyEditionCreationTime": "18:06:00:00"
+      }
+    },
+    "PsBR": null,
+    "PsBS": null
+  },
+  "ErrorsERResponse": {
+    "BPEPreBureauErrorCount": 0,
+    "BPEPostBureauErrorCount": null,
+    "ERR": []
+  },
+  "BureauData": [],
+  "Rds": [],
+  "RequestUUID": "6f5ff7fa-454f-4c36-b861-bef2c7823f30",
+  "ErrorMessageList": null
+}

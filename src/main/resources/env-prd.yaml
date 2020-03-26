@@ -1,0 +1,28 @@
+port: "443"
+host: "cloudapi.eastwestbank.com"  
+
+documentstorageservice:
+  sendsubmission: "/DocumentStorageService/api/documentstorage/documents"  
+creditcheckservice:
+  create: "/CreditCheckService/api/creditcheck/evaluation"
+  update: "/CreditCheckService/api/creditcheck/evaluation"     
+  status: "/CreditCheckService/api/creditcheck/evaluationstatus"
+azure:
+  creditcard: 
+    host: "ewaz-pr01-usw2-vfa-cust-ownd-prds.azurewebsites.net"
+    code: "ek3nMk3dGwValJ9TTJ0YBnQ5XkkVb/mnrq79sOa0mpAxcUfdxAG9HQ=="
+    getstatus: "/api/ApplicationStatuses/cis/{customernumber}"       
+
+oauth:
+  client_id: "0oa1m24914hR1jXLc2p7"
+  client_secret: "zsgXZSh_qPN_fEIS2Q4k-ge1EtGEa604FcyoVwE0"
+  token_url: "https://velobank.okta.com/oauth2/aus1lp5sgqUPocJGm2p7/v1/token"
+  host: "velobank.okta.com"
+  path: "/oauth2/aus1lp5sgqUPocJGm2p7/v1/token" 
+  expiry_duration_sec: "3500"
+  
+json:
+  logger:
+    application:
+      name: ${project.name}
+      version: ${project.version}

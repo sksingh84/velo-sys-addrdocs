@@ -1,0 +1,122 @@
+#%RAML 1.0
+title: Velo Bank
+
+/system:
+  /docrepository:
+    /sendsubmission:
+      displayName: sendsubmission
+      description: This SYSTEM API is used to send the submission, uses OKTA service
+      post:
+        body:
+          application/json:
+            example: 
+              {"SourceIdentifierId": "tererwerwere","DocumentSource": "Deposit","DocumentType": "DriversLicense","DocumentExtension": "JPG", "DocumentContent": "111000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011100000000000000000000000000000000000111110010000000000000000000010000000000010111011000111111111111111111111110110111011101111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111",  "AccountNumber": "1234","CustomerNumber": "5678","CustomerName":"ewb test","TaxIdNo":"123456","DocumentDate": "2018-02-28T16:41:41.090Z","RequestUUID": "YYYYY" }
+        responses:
+          200:
+            body:
+              application/json:
+                type: !include entities/submitResponse.raml
+          400:
+            description: Returns bad request
+            body:
+              application/json:
+                example:
+                  {"message":"Bad Request"}                
+          404:
+            description: Returns record not found
+            body:
+              application/json:
+                example:
+                    {"message":"Resource not found"}
+          500:
+            description: Returns process failed error
+            body:
+              application/json:
+                example:
+                  {"message":"Internal Server Error"}
+                  
+  /creditcheck:    
+    post:      
+      body:
+        application/json:
+          example: !include request/post-creditcheck-request.json
+      responses:
+        200:
+          body:
+            application/json:
+              example: !include request/post-creditcheck-response.json
+        400:
+          description: Returns bad request
+          body:
+            application/json:
+              example:
+                {"message":"Bad Request"}                
+        404:
+          description: Returns record not found
+          body:
+            application/json:
+              example:
+                  {"message":"Resource not found"}
+        500:
+          description: Returns process failed error
+          body:
+            application/json:
+              example:
+                {"message":"Internal Server Error"}    
+    put:
+      body:
+        application/json:
+          example: !include request/put-creditcheck-request.json
+            
+      responses:
+        200:
+          body:
+            application/json:
+               example: !include request/put-creditcheck-response.json
+        400:
+          description: Returns bad request
+          body:
+            application/json:
+              example:
+                {"message":"Bad Request"}                
+        404:
+          description: Returns record not found
+          body:
+            application/json:
+              example:
+                  {"message":"Resource not found"}
+        500:
+          description: Returns process failed error
+          body:
+            application/json:
+              example:
+                {"message":"Internal Server Error"}                               
+    
+    
+    /evaluationstatus:
+      /{customernumber}:
+        description: Get Evaluation Status
+        get:    
+          responses:
+            200:
+              body:
+                application/json:
+                  example: !include request/get-evaluationstatus-response.json
+            400:
+              description: Returns bad request
+              body:
+                application/json:
+                  example:
+                    {"message":"Bad Request"}                
+            404:
+              description: Returns record not found
+              body:
+                application/json:
+                  example:
+                      {"message":"Resource not found"}
+            500:
+              description: Returns process failed error
+              body:
+                application/json:
+                  example:
+                    {"message":"Internal Server Error"} 

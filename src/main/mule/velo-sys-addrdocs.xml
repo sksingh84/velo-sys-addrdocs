@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd  http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd">
+    <http:listener-config name="velo-sys-addrdocs-httpListenerConfig">
+        <http:listener-connection host="0.0.0.0" port="8091" />
+    </http:listener-config>
+    <apikit:config name="velo-sys-addrdocs-config"  raml="velo-sys-addrdocs.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <import doc:name="Import" file="genericerrorhandler.xml" />
+    <import doc:name="Import" file="requestuuid.xml" />
+    <http:request-config name="AzureCreditCard" doc:name="HTTP Request configuration" doc:id="86d5b245-6458-4a22-924a-ed74f4946316" requestStreamingMode="NEVER" responseTimeout="60000">
+        <http:request-connection protocol="HTTPS" host="${azure.creditcard.host}" port="${port}" connectionIdleTimeout="60000" />
+    </http:request-config>
+    <http:request-config name="HTTP_Request_configuration_OpenAPI" doc:name="HTTP Request configuration" doc:id="94462234-f891-4354-ac54-1de8c3fa3030">
+        <http:request-connection protocol="HTTPS" host="${host}" port="${port}" />
+    </http:request-config>
+    <flow name="velo-sys-addrdocs-main">
+        <http:listener config-ref="velo-sys-addrdocs-httpListenerConfig" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <set-variable value="#[attributes.method]" doc:name="httpmethodval" doc:id="8bc2a2d7-9807-4a98-93a5-a1693fcf9e08" variableName="httpmethodval" />
+        <set-variable value="#[vars.httpmethodval ++ &quot;:&quot; ++ attributes.requestPath]" doc:name="endpointForLog" doc:id="6732dbfa-3e4e-4bb4-8170-4ef88ab240d1" variableName="endpointforlog" />
+        <json-logger:logger doc:name="Logger" doc:id="1ecf1514-5a2e-4ba5-9fdb-22e52faba4cc" config-ref="JSON_Logger_Config" endpoint="#[vars.endpointforlog]" message="START" />
+        <flow-ref doc:name="requestuuidFlow" doc:id="025f8158-077c-47ff-be2c-1902bd792d38" name="requestuuidFlow" target="RequestUuid" targetValue="#[payload]" />
+        <apikit:router config-ref="velo-sys-addrdocs-config" />
+        <json-logger:logger doc:name="Logger" doc:id="75253413-4877-4740-9198-33d708175a8e" config-ref="JSON_Logger_Config" endpoint="#[vars.endpointforlog]" status="#[vars.'httpStatus']" message="END" tracePoint="END">
+            <json-logger:content><![CDATA[#[output application/json ---
+{
+ 	attributes: attributes
+}]]]></json-logger:content>
+        </json-logger:logger>
+        <error-handler ref="GenericErrorHandler" />
+    </flow>
+    <flow name="velo-sys-addrdocs-console">
+        <http:listener config-ref="velo-sys-addrdocs-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="velo-sys-addrdocs-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform xsi:schemaLocation=" http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd  http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="post:\system\docrepository\sendsubmission:application\json:velo-sys-addrdocs-config">
+        <flow-ref doc:name="documentstorageFlow" doc:id="e0944769-2941-4111-bbdb-e6993d94f4a5" name="documentstorageFlow" />
+    </flow>
+    <flow name="put:\system\creditcheck:application\json:velo-sys-addrdocs-config">
+        <flow-ref doc:name="updateNewCreaditEvaluation" doc:id="bee6e9de-e1b8-4b10-bb82-7c8d8be03746" name="updateNewCreaditEvaluation" />
+    </flow>
+    <flow name="post:\system\creditcheck:application\json:velo-sys-addrdocs-config">
+        <flow-ref doc:name="createNewCreaditEvaluation" doc:id="8ad47d39-9f99-460f-8930-8f5489091d82" name="createNewCreaditEvaluation" />
+    </flow>
+    <flow name="get:\system\creditcheck\evaluationstatus\(customernumber):velo-sys-addrdocs-config">
+        <flow-ref doc:name="creditcheckStatusFlow" doc:id="864dacf3-b38b-40de-8a71-40e7ea794c91" name="creditcheckStatusFlow" />
+    </flow>
+</mule>

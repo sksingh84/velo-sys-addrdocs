@@ -1,0 +1,91 @@
+{
+"EvaluationStatuses": [
+  {
+"ApplicationNumber": "000000000010407",
+"ApplicationStatus": "Approved",
+"ApplicationStatusDate": "9/22/2019 12:00:00 AM"
+},
+  {
+"ApplicationNumber": "000000000019882",
+"ApplicationStatus": "BureauError",
+"ApplicationStatusDate": "10/2/2019 12:00:00 AM"
+},
+  {
+"ApplicationNumber": "000000000020714",
+"ApplicationStatus": "Referred",
+"ApplicationStatusDate": "10/3/2019 12:00:00 AM"
+},
+  {
+"ApplicationNumber": "000000000020720",
+"ApplicationStatus": "BureauError",
+"ApplicationStatusDate": "10/3/2019 12:00:00 AM"
+},
+  {
+"ApplicationNumber": "000000000021485",
+"ApplicationStatus": "Referred",
+"ApplicationStatusDate": "10/4/2019 12:00:00 AM"
+},
+  {
+"ApplicationNumber": "000000000022172",
+"ApplicationStatus": "BureauError",
+"ApplicationStatusDate": "10/8/2019 12:00:00 AM"
+},
+  {
+"ApplicationNumber": "000000000023111",
+"ApplicationStatus": null,
+"ApplicationStatusDate": "10/16/2019 12:00:00 AM"
+},
+  {
+"ApplicationNumber": "000000000023356",
+"ApplicationStatus": null,
+"ApplicationStatusDate": "10/16/2019 12:00:00 AM"
+},
+  {
+"ApplicationNumber": "000000000023608",
+"ApplicationStatus": null,
+"ApplicationStatusDate": "10/17/2019 12:00:00 AM"
+},
+  {
+"ApplicationNumber": "000000000023837",
+"ApplicationStatus": null,
+"ApplicationStatusDate": "10/17/2019 12:00:00 AM"
+},
+  {
+"ApplicationNumber": "000000000023613",
+"ApplicationStatus": null,
+"ApplicationStatusDate": "10/17/2019 12:00:00 AM"
+},
+  {
+"ApplicationNumber": "000000000023858",
+"ApplicationStatus": null,
+"ApplicationStatusDate": "10/17/2019 12:00:00 AM"
+},
+  {
+"ApplicationNumber": "000000000023842",
+"ApplicationStatus": null,
+"ApplicationStatusDate": "10/17/2019 12:00:00 AM"
+},
+  {
+"ApplicationNumber": "000000000023863",
+"ApplicationStatus": null,
+"ApplicationStatusDate": "10/17/2019 12:00:00 AM"
+},
+  {
+"ApplicationNumber": "000000000023879",
+"ApplicationStatus": null,
+"ApplicationStatusDate": "10/17/2019 12:00:00 AM"
+},
+  {
+"ApplicationNumber": "000000000023884",
+"ApplicationStatus": null,
+"ApplicationStatusDate": "10/17/2019 12:00:00 AM"
+},
+  {
+"ApplicationNumber": "000000000023890",
+"ApplicationStatus": null,
+"ApplicationStatusDate": "10/17/2019 12:00:00 AM"
+}
+],
+"RequestUUID": null,
+"ErrorMessageList": null
+}

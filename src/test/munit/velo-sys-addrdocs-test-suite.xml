@@ -1,0 +1,918 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+	xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<munit:config name="velo-sys-addrdocs-test-suite.xml" />
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="0519aab0-769d-4574-a2ef-d23944d3d244" basePath="/api" >
+		<http:request-connection host="localhost" port="8091" />
+	</http:request-config>
+	<http:request-config name="HTTP_Request_configuration1" doc:name="HTTP Request configuration" doc:id="28ad49d8-2870-4080-baa3-66849ffd2afd" basePath="/console" >
+		<http:request-connection host="localhost" port="8091" />
+	</http:request-config>
+	<munit:test name="velo-sys-addrdocs-test-suite-oauth-token-cache-configFlowTest" description="Test" doc:id="ea2a690c-c96f-4204-a490-aec561852e07" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock ObjectStore" doc:id="f611714c-4887-47e7-b91b-99d04612bc57" processor="os:retrieve">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="doc:name" whereValue="Retrieve" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#['{&quot;access_token&quot;: &quot;eyJraWQiOiJGSE1jTWJIUlpMd01QSXgweDlGM1lESDlUenVXdy1QNHJ6eFl6LTREc2xnIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULmlueExxUzV1bkRCcmFXQjF5S3ZaS0JIeGJ0X3ZxcndsLTcwd1JLQTJ0VzgiLCJpc3MiOiJodHRwczovL3Nzby10ZXN0LnZlbG9iYW5rLmNvbS9vYXV0aDIvYXVzZjJjMThxcXRtR0h5WDgwaDciLCJhdWQiOiJodHRwczovL2Rldm9wZW5hcGkudmVsb2JhbmsuY29tLyIsImlhdCI6MTU0NzgzNzU1MCwiZXhwIjoxNTQ3ODQxMTUwLCJjaWQiOiIwb2FmZ2s1cjM3aDFQVVJDRDBoNyIsInNjcCI6WyJhcGk6cmVhZCJdLCJzdWIiOiIwb2FmZ2s1cjM3aDFQVVJDRDBoNyJ9.EKuQKPvEN05H3leHH7MQb1-5o5tUlENzyxdPLfuTLzI189cx0fVzvmFAED8Bg-Yt4vAscmJ8w4jO0oX2QZM0pVxmHNDYAW-Me1PNcoLTKBzRZKk54ANPomM9xgc7jzyOXy8bzSV0-_IooiWXeY9lvGIn1adV6H3Q9Osc5xXzHRJe3PMR3_VchM5hwsqePrg1BFagcEVDlBQp5xWxYmgDqE55Ao1mwrGAFxEnCpVyMUQG4rNf8j_tLDagkUCRvK3LyUOZX4ITNo40fucHOtPRvBYl4eT3ay_A22HTQ-CL4oqzEzWJQsO7LYxfndq0lzhz2U4rSN7hfHpfYeceTKrgWg&quot;,&quot;token_type&quot;: &quot;Bearer&quot;,&quot;expires_in&quot;: 3600,&quot;scope&quot;: &quot;api:read&quot;}']" mediaType="application/json"/>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to oauth-token-cache-configFlow" doc:id="78f68b3c-b230-45fa-9fcd-b7b690fa0604" name="oauth-token-cache-configFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert Payload Not Null" doc:id="ff61433e-18b4-48b9-9b84-de1e6a4bc2df" message="No Token" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="velo-sys-addrdocs-test-suite-oauth-token-cache-configFlowTest1" description="Test" doc:id="7bdeab48-32e1-45e3-9622-7f8999c6c8cc" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock ObjectStore" doc:id="c957c57f-f668-43d0-ad69-ed06d3a33424" processor="os:retrieve">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="doc:name" whereValue="Retrieve" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return>
+					<munit-tools:payload value="#['Empty']" mediaType="application/text" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock OAuth Request" doc:id="c7185fef-262b-4f52-904c-ae07f7fcaef5" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="doc:name" whereValue="OAuth Request" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#['{&quot;access_token&quot;: &quot;eyJraWQiOiJGSE1jTWJIUlpMd01QSXgweDlGM1lESDlUenVXdy1QNHJ6eFl6LTREc2xnIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULmlueExxUzV1bkRCcmFXQjF5S3ZaS0JIeGJ0X3ZxcndsLTcwd1JLQTJ0VzgiLCJpc3MiOiJodHRwczovL3Nzby10ZXN0LnZlbG9iYW5rLmNvbS9vYXV0aDIvYXVzZjJjMThxcXRtR0h5WDgwaDciLCJhdWQiOiJodHRwczovL2Rldm9wZW5hcGkudmVsb2JhbmsuY29tLyIsImlhdCI6MTU0NzgzNzU1MCwiZXhwIjoxNTQ3ODQxMTUwLCJjaWQiOiIwb2FmZ2s1cjM3aDFQVVJDRDBoNyIsInNjcCI6WyJhcGk6cmVhZCJdLCJzdWIiOiIwb2FmZ2s1cjM3aDFQVVJDRDBoNyJ9.EKuQKPvEN05H3leHH7MQb1-5o5tUlENzyxdPLfuTLzI189cx0fVzvmFAED8Bg-Yt4vAscmJ8w4jO0oX2QZM0pVxmHNDYAW-Me1PNcoLTKBzRZKk54ANPomM9xgc7jzyOXy8bzSV0-_IooiWXeY9lvGIn1adV6H3Q9Osc5xXzHRJe3PMR3_VchM5hwsqePrg1BFagcEVDlBQp5xWxYmgDqE55Ao1mwrGAFxEnCpVyMUQG4rNf8j_tLDagkUCRvK3LyUOZX4ITNo40fucHOtPRvBYl4eT3ay_A22HTQ-CL4oqzEzWJQsO7LYxfndq0lzhz2U4rSN7hfHpfYeceTKrgWg&quot;,&quot;token_type&quot;: &quot;Bearer&quot;,&quot;expires_in&quot;: 3600,&quot;scope&quot;: &quot;api:read&quot;}']" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock ObjectStore" doc:id="07b68d38-9298-4a7a-a138-6a88c6df62e5" processor="os:store">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="doc:name" whereValue="Store Access Token" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<set-variable value="post" doc:name="Set HttpMethodVal" doc:id="19c90ec7-1394-4d0b-a6ac-95a13dc19be7" variableName="httpmethodval"/>
+			<flow-ref doc:name="Flow-ref to oauth-token-cache-configFlow" doc:id="71c9ac48-0f63-4a19-bcff-b9a61e30209a" name="oauth-token-cache-configFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Payload not null" doc:id="369d7a3c-4c5f-447a-9c1c-77157ddfac90" expression="#[payload]" is="#[MunitTools::notNullValue()]" message="Failure"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="velo-sys-addrdocs-test-suite-documentstorageFlowTest" description="Test" doc:id="77121e0d-54f6-4b42-b1e6-40c5c7fe8ad7" >
+		<munit:behavior >
+			<set-payload value='#[{
+	"SourceIdentifierId": "tererwerwere1",
+	"DocumentSource": "Deposit",
+	"DocumentType": "DriversLicense",
+ 	"DocumentExtension": "JPG", 	
+ 	"DocumentContent": "111000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011100000000000000000000000000000000000111110010000000000000000000010000000000010111011000111111111111111111111110110111011101111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111", 	
+ 	"AccountNumber": "1234567",
+ 	"CustomerNumber": "5678",
+	"CustomerName":"ewb test",
+	"TaxIdNo":"123456",
+ 	"DocumentDate": "2018-02-28T16:41:41.090Z",
+	"RequestUUID": "12345",
+	"access_token": "eyJraWQiOiJGSE1jTWJIUlpMd01QSXgweDlGM1lESDlUenVXdy1QNHJ6eFl6LTREc2xnIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULmlueExxUzV1bkRCcmFXQjF5S3ZaS0JIeGJ0X3ZxcndsLTcwd1JLQTJ0VzgiLCJpc3MiOiJodHRwczovL3Nzby10ZXN0LnZlbG9iYW5rLmNvbS9vYXV0aDIvYXVzZjJjMThxcXRtR0h5WDgwaDciLCJhdWQiOiJodHRwczovL2Rldm9wZW5hcGkudmVsb2JhbmsuY29tLyIsImlhdCI6MTU0NzgzNzU1MCwiZXhwIjoxNTQ3ODQxMTUwLCJjaWQiOiIwb2FmZ2s1cjM3aDFQVVJDRDBoNyIsInNjcCI6WyJhcGk6cmVhZCJdLCJzdWIiOiIwb2FmZ2s1cjM3aDFQVVJDRDBoNyJ9.EKuQKPvEN05H3leHH7MQb1-5o5tUlENzyxdPLfuTLzI189cx0fVzvmFAED8Bg-Yt4vAscmJ8w4jO0oX2QZM0pVxmHNDYAW-Me1PNcoLTKBzRZKk54ANPomM9xgc7jzyOXy8bzSV0-_IooiWXeY9lvGIn1adV6H3Q9Osc5xXzHRJe3PMR3_VchM5hwsqePrg1BFagcEVDlBQp5xWxYmgDqE55Ao1mwrGAFxEnCpVyMUQG4rNf8j_tLDagkUCRvK3LyUOZX4ITNo40fucHOtPRvBYl4eT3ay_A22HTQ-CL4oqzEzWJQsO7LYxfndq0lzhz2U4rSN7hfHpfYeceTKrgWg"
+ }]' doc:name="Set Payload" doc:id="8f3bd4dc-827f-43c1-b4bf-6dd48476f375" />
+			<set-variable value="post" doc:name="Set HttpMethodVal" doc:id="dbb46e68-2ff7-4ee5-87a2-bb74b3bb92dd" variableName="httpmethodval" />
+			<munit-tools:mock-when doc:name="Mock OAuth Flow" doc:id="b5cf3bc9-dce8-4b5e-8c42-f8ede4e2d712" processor="mule:flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="doc:name" whereValue="oauth-token-cache-configFlow" />
+				</munit-tools:with-attributes>				
+				<munit-tools:then-return >
+					<munit-tools:variables >
+						<munit-tools:variable key="oauth_access_token" value="#['eyJraWQiOiJGSE1jTWJIUlpMd01QSXgweDlGM1lESDlUenVXdy1QNHJ6eFl6LTREc2xnIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULmlueExxUzV1bkRCcmFXQjF5S3ZaS0JIeGJ0X3ZxcndsLTcwd1JLQTJ0VzgiLCJpc3MiOiJodHRwczovL3Nzby10ZXN0LnZlbG9iYW5rLmNvbS9vYXV0aDIvYXVzZjJjMThxcXRtR0h5WDgwaDciLCJhdWQiOiJodHRwczovL2Rldm9wZW5hcGkudmVsb2JhbmsuY29tLyIsImlhdCI6MTU0NzgzNzU1MCwiZXhwIjoxNTQ3ODQxMTUwLCJjaWQiOiIwb2FmZ2s1cjM3aDFQVVJDRDBoNyIsInNjcCI6WyJhcGk6cmVhZCJdLCJzdWIiOiIwb2FmZ2s1cjM3aDFQVVJDRDBoNyJ9.EKuQKPvEN05H3leHH7MQb1-5o5tUlENzyxdPLfuTLzI189cx0fVzvmFAED8Bg-Yt4vAscmJ8w4jO0oX2QZM0pVxmHNDYAW-Me1PNcoLTKBzRZKk54ANPomM9xgc7jzyOXy8bzSV0-_IooiWXeY9lvGIn1adV6H3Q9Osc5xXzHRJe3PMR3_VchM5hwsqePrg1BFagcEVDlBQp5xWxYmgDqE55Ao1mwrGAFxEnCpVyMUQG4rNf8j_tLDagkUCRvK3LyUOZX4ITNo40fucHOtPRvBYl4eT3ay_A22HTQ-CL4oqzEzWJQsO7LYxfndq0lzhz2U4rSN7hfHpfYeceTKrgWg']" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock Send Submission Request" doc:id="33107ab9-8999-4a09-ba26-ac77a11e647c" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="doc:name" whereValue="SendSubmissionRequest" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#['{&quot;FullAddress&quot;: &quot;9300 Flair Dr Ste 302;El Monte, CA 91731-2802&quot;,&quot;Latitude&quot;: &quot;&quot;,&quot;City&quot;: &quot;El Monte&quot;,&quot;Longitude&quot;: &quot;&quot;,&quot;ErrorMessageList&quot;: [],&quot;ResultCodes&quot;: [{&quot;LongDescription&quot;: &quot;The subadministrative area was added or changed.&quot;,&quot;Code&quot;: &quot;AC16&quot;,&quot;ShortDescription&quot;: &quot;SubAdministrative Area Change&quot;},{&quot;LongDescription&quot;: &quot;The address has been partially verified to the Premise (House or Building) Level, which is NOT the highest level possible with the reference data.&quot;,&quot;Code&quot;: &quot;AV14&quot;,&quot;ShortDescription&quot;: &quot;Premise Partial&quot;}],&quot;AddressLine2&quot;: &quot;El Monte, CA 91731-2802&quot;,&quot;AddressLine1&quot;: &quot;9300 Flair Dr Ste 302&quot;,&quot;State&quot;: &quot;CA&quot;,&quot;Zipcode&quot;: &quot;91731-2802&quot;,&quot;Country&quot;: &quot;United States of America&quot;,&quot;RecordID&quot;: &quot;YYLLLYYY&quot;,&quot;RequestUUID&quot;: &quot;YYLLLYYY&quot;}']" />
+					<munit-tools:attributes value="#['{&quot;httpStatus&quot;: 200}']" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to documentstorageFlow" doc:id="1180a61d-4a04-4dfa-971c-dbf5a26644a3" name="documentstorageFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Payload not null" doc:id="ba1b8238-f5a0-440e-8857-7f9bab6e74ec" expression="#[payload]" is="#[MunitTools::notNullValue()]" message="Failure"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="velo-sys-addrdocs-test-suite-velo-sys-addrdocs-mainTest" description="Test" doc:id="314aa481-79cd-4cb5-8bb8-597d227c77a0" >
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="velo-sys-addrdocs-main" />
+			<munit:enable-flow-source value="post:\system\docrepository\sendsubmission:application\json:velo-sys-addrdocs-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock RequestUUID Flow" doc:id="0a9ba81e-d9cf-4c60-83ef-f710b5e35106" processor="mule:flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="doc:name" whereValue="requestuuidFlow" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:variables >
+						<munit-tools:variable key="RequestUuid" value="#['2c1c009e-4773-4bce-a5cb-ea5f4ff13e03']" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock DocumentStorage Flow" doc:id="a38c17f9-b3f7-4005-a787-d615e436c8ad" processor="mule:flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="doc:name" whereValue="documentstorageFlow" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#['{
+  &quot;RequestUUID&quot;: &quot;12345678&quot;,
+  &quot;ErrorMessageList&quot;: [
+    {
+      &quot;ErrorMessageNumber&quot;: &quot;&quot;,
+      &quot;ErrorMessageText&quot;: &quot;&quot;
+    }
+  ]
+}']" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+			<set-payload value="#['{&quot;SourceIdentifierId&quot;: &quot;tererwerwere&quot;,&quot;DocumentSource&quot;: &quot;Deposit&quot;,&quot;DocumentType&quot;: &quot;DriversLicense&quot;,&quot;DocumentExtension&quot;: &quot;JPG&quot;, &quot;DocumentContent&quot;: &quot;111000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011100000000000000000000000000000000000111110010000000000000000000010000000000010111011000111111111111111111111110110111011101111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111&quot;,  &quot;AccountNumber&quot;: &quot;1234&quot;,&quot;CustomerNumber&quot;: &quot;5678&quot;,&quot;CustomerName&quot;:&quot;ewb test&quot;,&quot;TaxIdNo&quot;:&quot;123456&quot;,&quot;DocumentDate&quot;: &quot;2018-02-28T16:41:41.090Z&quot;,&quot;RequestUUID&quot;: &quot;YYYYY&quot; }']" doc:name="Set Payload" doc:id="52f2f02d-10c6-4f2b-81ac-af5b09a64a4c" mimeType="application/json"/>
+			<http:request method="POST" doc:name="Request" doc:id="651656b9-02c9-44be-b244-01a473766c73" config-ref="HTTP_Request_configuration" path="/system/docrepository/sendsubmission">
+				<http:headers ><![CDATA[#[output application/java
+---
+{
+	"Accept" : "application/json"
+}]]]></http:headers>
+			</http:request>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Status Code is OK" doc:id="5b796e88-be22-449f-bcf2-71f08b73d85b" expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(200)]" message="The HTTP Status code is not correct!"/>
+		</munit:validation>
+	</munit:test>	
+	<munit:test name="velo-sys-addrdocs-test-suite-velo-sys-addrdocs-consoleTest" description="Test" doc:id="39dd652a-17ea-494a-9613-03e53821006e" >
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="velo-sys-addrdocs-console" />
+			<munit:enable-flow-source value="post:\system\docrepository\sendsubmission:application\json:velo-sys-addrdocs-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock RequestUUID Flow" doc:id="52ddb866-1cb6-4576-b33d-e4a815df0cc1" processor="mule:flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="doc:name" whereValue="requestuuidFlow" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:variables >
+						<munit-tools:variable key="RequestUuid" value="#['2c1c009e-4773-4bce-a5cb-ea5f4ff13e03']" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock DocumentStorage Flow" doc:id="ecc46a38-792d-4db4-a4d5-f4dc1baa7dda" processor="mule:flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="doc:name" whereValue="documentstorageFlow" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#['{
+  &quot;RequestUUID&quot;: &quot;12345678&quot;,
+  &quot;ErrorMessageList&quot;: [
+    {
+      &quot;ErrorMessageNumber&quot;: &quot;&quot;,
+      &quot;ErrorMessageText&quot;: &quot;&quot;
+    }
+  ]
+}']" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution>
+			<set-payload value="#['{&quot;SourceIdentifierId&quot;: &quot;tererwerwere&quot;,&quot;DocumentSource&quot;: &quot;Deposit&quot;,&quot;DocumentType&quot;: &quot;DriversLicense&quot;,&quot;DocumentExtension&quot;: &quot;JPG&quot;, &quot;DocumentContent&quot;: &quot;111000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000011100000000000000000000000000000000000111110010000000000000000000010000000000010111011000111111111111111111111110110111011101111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111&quot;,  &quot;AccountNumber&quot;: &quot;1234&quot;,&quot;CustomerNumber&quot;: &quot;5678&quot;,&quot;CustomerName&quot;:&quot;ewb test&quot;,&quot;TaxIdNo&quot;:&quot;123456&quot;,&quot;DocumentDate&quot;: &quot;2018-02-28T16:41:41.090Z&quot;,&quot;RequestUUID&quot;: &quot;YYYYY&quot; }']" doc:name="Set Payload" doc:id="480ba1d0-7bd6-4300-ba7f-c74db047a8f7" mimeType="application/json"/>
+			<http:request method="POST" doc:name="Request" doc:id="65a959ee-c7ff-49f6-87ff-d4c9530d3da4" config-ref="HTTP_Request_configuration1" path="/system/docrepository/sendsubmission">
+				<http:headers ><![CDATA[#[output application/java
+---
+{
+	"Accept" : "application/json"
+}]]]></http:headers>
+				<http:response-validator >
+					<http:success-status-code-validator values="100..599" />
+				
+</http:response-validator>
+			
+</http:request>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Status Code is Not Found" doc:id="63299f47-aefe-402a-a477-6ec536402091" expression="#[attributes.statusCode]" is="#[MunitTools::equalTo(404)]" message="The HTTP Status code is not correct!"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="velo-sys-addrdocs-test-suite-post:\system\docrepository\sendsubmission:velo-sys-addrdocs-configTest" description="Test" doc:id="1686f7f8-fd99-4e8e-a131-f27f386ffc13" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock DocumentStorage Flow" doc:id="f0de426b-511d-4a96-877b-6ad510346f54" processor="mule:flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="doc:name" whereValue="documentstorageFlow" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#['{
+  &quot;RequestUUID&quot;: &quot;12345678&quot;,
+  &quot;ErrorMessageList&quot;: [
+    {
+      &quot;ErrorMessageNumber&quot;: &quot;&quot;,
+      &quot;ErrorMessageText&quot;: &quot;&quot;
+    }
+  ]
+}']" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to post:\system\docrepository\sendsubmission:application\json:velo-sys-addrdocs-config" doc:id="944a6326-0038-45fd-b677-6e3881546843" name="post:\system\docrepository\sendsubmission:application\json:velo-sys-addrdocs-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Response not null" doc:id="68916ef7-c344-4c46-b7c3-71c94a7b3c13" expression="#[payload.RequestUUID]" is="#[MunitTools::equalTo('12345678')]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="velo-sys-addrdocs-test-suite-updateNewCreaditEvaluationFlowTest" description="MUnit Test" doc:id="1cf54026-e2e9-49d2-984a-78cc2ea520cb" >
+	<munit:behavior >
+			<set-payload doc:name="Set Payload" doc:id="8f5c59e0-165f-4c8e-be1d-67d825396fdd" value='#[{
+  "Application": {
+	"ApplicationNumber": "000000000023111",
+    "ApplicationSource": "VELOOnline",
+    "ProductCode": "VPL",
+    "AmountRequested": "0",
+    "SecuredCardDepositAcctNum": "23232323",
+    "TsandCsCardAgreementInd": true,
+    "TsandCsDepositAgreementInd": true,
+    "TsandCsCardAgreementTimestamp": "2019-12-15T08:00:00",
+    "TsandCsDepositAgreementTimestamp": "2019-12-15T08:00:00",
+    "DoNotBankFlag": false,
+    "MailingAddressIndicator": false
+  },
+  "Applicant": {
+    "CxArrayIndex": 1,
+    "ApplicantType": "Primary",
+    "SSN": "666252876",
+    "DateofBirth": "1989-09-22",
+    "AnnualSalary": 95000,
+    "OtherIncome": 8000,
+    "MthlyHousingPymt": 7000,
+    "HousingStatus": "Own",
+    "OtherMthlyObligations": 6000,
+    "AnnualGrossIncome": 9000,
+    "DisposableMthlyIncome": 66,
+    "CISNumber": "12345",
+    "CISOldestActiveDPAcctOpenDate": "2010-02-01",
+    "CISAllDPAcctsTotalCurrentBalance": 9000,
+    "CISAllDPAcctsAverageBalance": 600,
+    "ADDR": [
+      {
+        "CxArrayIndex": 1,
+        "AddressType": "Home",
+        "HouseNumber": "13520",
+        "PreDirectional": "",
+        "StreetName": "Myrtle",
+        "StreetType": "none",
+        "PostDirectional": "",
+        "Unit": "none",
+        "City": "Chino",
+        "State": "CA",
+        "Country": "",
+        "Postcode": "91708",
+        "YearsAtAddress": 2,
+        "MonthsAtAddress": 4
+      }
+    ],
+    "CONT": [
+      {
+        "CxArrayIndex": 1,
+        "PhoneType": "Phone",
+        "PhoneNumber": "2323232323",
+        "EmailAddress": "none"
+      }
+    ],
+    "EMP": [
+      {
+        "CxArrayIndex": 1,
+        "Type": "Employed",
+        "Occupation": "SD",
+        "Name": "NameTest",
+        "AddressLine1": "Addr1",
+        "AddressLine2": "Addr2",
+        "City": "El Monte",
+        "State": "CA",
+        "Postcode": "91731",
+        "PhoneNumber": "2323232323",
+        "YearsWithEmployer": 4,
+        "MonthsWithEmployer": 5
+      }
+    ],
+    "IDNT": [
+      {
+        "CxArrayIndex": 1,
+        "IDType": "DriversLicense",
+        "IDDescription": "USCitizen",
+        "IDCountry": "USA",
+        "IDState": "CA",
+        "IDIssueDate": "2017-09-22T02:56:51.426Z",
+        "IDExpiration": "2020-09-22T02:56:51.426Z",
+        "IDNumber": "232323"
+      }
+    ],
+    "NME": [
+      {
+        "CxArrayIndex": 1,
+        "NameType": "",
+        "Title": "",
+        "FirstName": "MARIA",
+        "LastName": "GONZALEZ",
+        "MiddleName": "Mr",
+        "Suffix": "",
+        "MotherMaidenName": "Rai"
+      }
+    ],
+    "ASST": [
+      {
+        "CxArrayIndex": 1,
+        "AssetInstitutionName": "EWB",
+        "AssetAmount": 123450,
+        "AssetAccountType": "Checking"
+      }
+    ]
+  },
+  "RequestUUID": "6f5ff7fa-454f-4c36-b861-bef2c7823f30"
+}]'/>
+			<set-variable value="put" doc:name="Set HttpMethodVal" doc:id="54de6387-89d1-4aa4-9b88-212928026125" variableName="httpmethodval" />
+			<munit-tools:mock-when doc:name="Mock OAuth Flow" doc:id="fb8f053b-2578-430a-861c-12c2f9bb229d" processor="mule:flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="doc:name" whereValue="oauth-token-cache-configFlow" />
+				</munit-tools:with-attributes>				
+				<munit-tools:then-return >
+					<munit-tools:variables >
+						<munit-tools:variable key="oauth_access_token" value="#['eyJraWQiOiJGSE1jTWJIUlpMd01QSXgweDlGM1lESDlUenVXdy1QNHJ6eFl6LTREc2xnIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULmlueExxUzV1bkRCcmFXQjF5S3ZaS0JIeGJ0X3ZxcndsLTcwd1JLQTJ0VzgiLCJpc3MiOiJodHRwczovL3Nzby10ZXN0LnZlbG9iYW5rLmNvbS9vYXV0aDIvYXVzZjJjMThxcXRtR0h5WDgwaDciLCJhdWQiOiJodHRwczovL2Rldm9wZW5hcGkudmVsb2JhbmsuY29tLyIsImlhdCI6MTU0NzgzNzU1MCwiZXhwIjoxNTQ3ODQxMTUwLCJjaWQiOiIwb2FmZ2s1cjM3aDFQVVJDRDBoNyIsInNjcCI6WyJhcGk6cmVhZCJdLCJzdWIiOiIwb2FmZ2s1cjM3aDFQVVJDRDBoNyJ9.EKuQKPvEN05H3leHH7MQb1-5o5tUlENzyxdPLfuTLzI189cx0fVzvmFAED8Bg-Yt4vAscmJ8w4jO0oX2QZM0pVxmHNDYAW-Me1PNcoLTKBzRZKk54ANPomM9xgc7jzyOXy8bzSV0-_IooiWXeY9lvGIn1adV6H3Q9Osc5xXzHRJe3PMR3_VchM5hwsqePrg1BFagcEVDlBQp5xWxYmgDqE55Ao1mwrGAFxEnCpVyMUQG4rNf8j_tLDagkUCRvK3LyUOZX4ITNo40fucHOtPRvBYl4eT3ay_A22HTQ-CL4oqzEzWJQsO7LYxfndq0lzhz2U4rSN7hfHpfYeceTKrgWg']" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock Update CreditEvaluation Request Request" doc:id="04b9e0da-2d2a-4914-9693-1c79b9496df9" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="updateCreditEvaluationRequest" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[{"Application": {"ApplicationNumber": "000000000023111","ApplicationCreationDate": "10/16/2019 12:00:00 AM","ApplicationCreationTime": "18:15:42:641","ApplicationUpdateDate": "10/16/2019 12:00:00 AM","ApplicationUpdateTime": "18:15:43:411","ApplicationStatus": "Declined","ServiceID": "NewCreditEvaluation","ProcessStage": "1","Version": "r1001","VersionDate": "9/19/2019 12:00:00 AM","ProductCode": "VPL","AmountRequested": "0.00","PreBRdmNbr1": "-1","PreBRdmNbr2": "-1","PreBRdmNbr3": "-1","PreBRdmNbr4": "-1","PreBRdmNbr5": "-1","PstBRdmNbr1": "-1","PstBRdmNbr2": "-1","PstBRdmNbr3": "-1","PstBRdmNbr4": "-1","PstBRdmNbr5": "-1","RequestID": "6f5ff7fa-454f-4c36-b861-bef2c7823f30","DecisionDate": "2019-10-16T00:00:00","DecisionTime": "18:15:43:406"},"Results": {"PrBR": {"PreBRdmNbr1": "977","PreBRdmNbr2": "759","PreBRdmNbr3": "944","PreBRdmNbr4": "518","PreBRdmNbr5": "351"},"PrBS": {"PreBPolicyDecSetter": {"PolicyDecisionText": "Declined","PolicyDecisionCategory": "Declined","PolicySortedRsnCodeTbl": [{"CxArrayIndex": 1,"Value": "P003"}]},"PreBEdition": {"PreBPolicyEditionNumber": "v1001","PreBPolicyEditionCreationDate": "2019-09-26T00:00:00","PreBPolicyEditionCreationTime": "18:06:00:00"}},"PsBR": null,"PsBS": null},"ErrorsERResponse": {"BPEPreBureauErrorCount": 0,"BPEPostBureauErrorCount": 0,"ERR": []},"BureauData": [],"Rds": [],"RequestUUID": "8f5d592b-8400-4191-a521-b03ae8e2fd0a","ErrorMessageList": null}]' />
+					<munit-tools:attributes value="#['{&quot;httpStatus&quot;: 200}']" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to updateNewCreaditEvaluationFlow" doc:id="449a17e4-a961-4142-83f3-bb75f70d7d83" name="updateNewCreaditEvaluation"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Payload not null" doc:id="2fc1c437-9686-4397-8675-1b2aa78d81d6" expression="#[payload]" is="#[MunitTools::notNullValue()]" message="Failure"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="velo-sys-addrdocs-test-suite-put:\system\creditcheck:application\json:velo-sys-addrdocs-configTest" description="MUnit Test" doc:id="e059b230-f063-493b-914e-b3ba98a36d85" >
+	<munit:behavior >
+			<munit-tools:mock-when doc:name="Update New CreaditEvaluation Flow" doc:id="5881a75a-6451-4cb9-8831-db03f55c0ccf" processor="mule:flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="updateNewCreaditEvaluation" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#['{
+  &quot;Application&quot;: {
+    &quot;ApplicationNumber&quot;: &quot;string&quot;,
+    &quot;ApplicationCreationDate&quot;: &quot;string&quot;,
+    &quot;ApplicationCreationTime&quot;: &quot;string&quot;,
+    &quot;ApplicationUpdateDate&quot;: &quot;string&quot;,
+    &quot;ApplicationUpdateTime&quot;: &quot;string&quot;,
+    &quot;ApplicationStatus&quot;: &quot;string&quot;,
+    &quot;ServiceID&quot;: &quot;string&quot;,
+    &quot;ProcessStage&quot;: &quot;string&quot;,
+    &quot;Version&quot;: &quot;string&quot;,
+    &quot;VersionDate&quot;: &quot;string&quot;,
+    &quot;ProductCode&quot;: &quot;string&quot;,
+    &quot;AmountRequested&quot;: &quot;string&quot;,
+    &quot;PreBRdmNbr1&quot;: &quot;string&quot;,
+    &quot;PreBRdmNbr2&quot;: &quot;string&quot;,
+    &quot;PreBRdmNbr3&quot;: &quot;string&quot;,
+    &quot;PreBRdmNbr4&quot;: &quot;string&quot;,
+    &quot;PreBRdmNbr5&quot;: &quot;string&quot;,
+    &quot;PstBRdmNbr1&quot;: &quot;string&quot;,
+    &quot;PstBRdmNbr2&quot;: &quot;string&quot;,
+    &quot;PstBRdmNbr3&quot;: &quot;string&quot;,
+    &quot;PstBRdmNbr4&quot;: &quot;string&quot;,
+    &quot;PstBRdmNbr5&quot;: &quot;string&quot;,
+    &quot;RequestID&quot;: &quot;string&quot;,
+    &quot;DecisionDate&quot;: &quot;2019-10-16T23:14:02.696Z&quot;,
+    &quot;DecisionTime&quot;: &quot;string&quot;
+  },
+  &quot;Results&quot;: {
+    &quot;PrBR&quot;: {
+      &quot;PreBRdmNbr1&quot;: &quot;string&quot;,
+      &quot;PreBRdmNbr2&quot;: &quot;string&quot;,
+      &quot;PreBRdmNbr3&quot;: &quot;string&quot;,
+      &quot;PreBRdmNbr4&quot;: &quot;string&quot;,
+      &quot;PreBRdmNbr5&quot;: &quot;string&quot;
+    },
+    &quot;PrBS&quot;: {
+      &quot;PreBPolicyDecSetter&quot;: {
+        &quot;PolicyDecisionText&quot;: &quot;string&quot;,
+        &quot;PolicyDecisionCategory&quot;: &quot;string&quot;,
+        &quot;PolicySortedRsnCodeTbl&quot;: [
+          {
+            &quot;CxArrayIndex&quot;: 0,
+            &quot;Value&quot;: &quot;string&quot;
+          }
+        ]
+      },
+      &quot;PreBEdition&quot;: {
+        &quot;PreBPolicyEditionNumber&quot;: &quot;string&quot;,
+        &quot;PreBPolicyEditionCreationDate&quot;: &quot;2019-10-16T23:14:02.696Z&quot;,
+        &quot;PreBPolicyEditionCreationTime&quot;: &quot;string&quot;
+      }
+    },
+    &quot;PsBR&quot;: {
+      &quot;PstBRdmNbr1&quot;: &quot;string&quot;,
+      &quot;PstBRdmNbr2&quot;: &quot;string&quot;,
+      &quot;PstBRdmNbr3&quot;: &quot;string&quot;,
+      &quot;PstBRdmNbr4&quot;: &quot;string&quot;,
+      &quot;PstBRdmNbr5&quot;: &quot;string&quot;,
+      &quot;App1RiskGrade&quot;: &quot;string&quot;,
+      &quot;App2RiskGrade&quot;: &quot;string&quot;,
+      &quot;AffordabilityLimitPct&quot;: &quot;string&quot;,
+      &quot;App1AffordabilityMonthlyPmt&quot;: &quot;string&quot;,
+      &quot;CreditLimit&quot;: &quot;string&quot;,
+      &quot;CLMinimumLimit&quot;: &quot;string&quot;,
+      &quot;CLMaximumLimit&quot;: &quot;string&quot;,
+      &quot;TermAPRPct&quot;: &quot;string&quot;,
+      &quot;TermMths&quot;: &quot;string&quot;,
+      &quot;DebtToIncome&quot;: 0,
+      &quot;DebtToIncomeWoMortgage&quot;: 0,
+      &quot;DebtToAssetMonthReserve&quot;: 0,
+      &quot;CreditCardLeverageRatio&quot;: 0,
+      &quot;NoScoreOrThinFileFlag&quot;: &quot;string&quot;,
+      &quot;UnderwritingSegment&quot;: 0,
+      &quot;EWBHighValueFlag&quot;: &quot;string&quot;,
+      &quot;FinalCreditLimit&quot;: 0,
+      &quot;CardBINNumber&quot;: &quot;string&quot;
+    },
+    &quot;PsBS&quot;: {
+      &quot;PstBApplicationPolicyDecSetter&quot;: {
+        &quot;PolicyDecisionText&quot;: &quot;string&quot;,
+        &quot;PolicyDecisionCategory&quot;: &quot;string&quot;,
+        &quot;PolicySortedRsnCodeTbl&quot;: [
+          {
+            &quot;CxArrayIndex&quot;: 0,
+            &quot;Value&quot;: &quot;string&quot;
+          }
+        ]
+      },
+      &quot;PstBApp1PolicyDecSetter&quot;: {
+        &quot;PolicyDecisionText&quot;: &quot;string&quot;,
+        &quot;PolicyDecisionCategory&quot;: &quot;string&quot;,
+        &quot;PolicySortedRsnCodeTbl&quot;: [
+          {
+            &quot;CxArrayIndex&quot;: 0,
+            &quot;Value&quot;: &quot;string&quot;
+          }
+        ]
+      },
+      &quot;PstBApp2PolicyDecSetter&quot;: {
+        &quot;PolicyDecisionText&quot;: &quot;string&quot;,
+        &quot;PolicyDecisionCategory&quot;: &quot;string&quot;,
+        &quot;PolicySortedRsnCodeTbl&quot;: [
+          {
+            &quot;CxArrayIndex&quot;: 0,
+            &quot;Value&quot;: &quot;string&quot;
+          }
+        ]
+      },
+      &quot;PstBEdition&quot;: {
+        &quot;PstBPolicyEditionNumber&quot;: &quot;string&quot;,
+        &quot;PstBPolicyEditionCreationDate&quot;: &quot;2019-10-16T23:14:02.697Z&quot;,
+        &quot;PstBPolicyEditionCreationTime&quot;: &quot;string&quot;
+      }
+    }
+  },
+  &quot;ErrorsERResponse&quot;: {
+    &quot;BPEPreBureauErrorCount&quot;: 0,
+    &quot;BPEPostBureauErrorCount&quot;: 0,
+    &quot;ERR&quot;: [
+      {
+        &quot;Code&quot;: &quot;string&quot;,
+        &quot;Message&quot;: &quot;string&quot;,
+        &quot;Source&quot;: &quot;string&quot;,
+        &quot;CxArrayIndex&quot;: 0
+      }
+    ]
+  },
+  &quot;BureauData&quot;: [
+    {
+      &quot;CxArrayIndex&quot;: 0,
+      &quot;BD&quot;: {
+        &quot;EXP&quot;: {
+          &quot;APP1&quot;: {
+            &quot;MLAIndicator&quot;: &quot;string&quot;,
+            &quot;Score&quot;: [
+              {
+                &quot;CxArrayIndex&quot;: 0,
+                &quot;Value&quot;: 0
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  &quot;Rds&quot;: [
+    {
+      &quot;Data&quot;: &quot;string&quot;,
+      &quot;OutputKey&quot;: &quot;string&quot;
+    }
+  ],
+  &quot;RequestUUID&quot;: &quot;8f5d592b-8400-4191-a521-b03ae8e2fd0a&quot;,
+  &quot;ErrorMessageList&quot;: [
+    {
+      &quot;ErrorMessageNumber&quot;: &quot;string&quot;,
+      &quot;ErrorMessageText&quot;: &quot;string&quot;
+    }
+  ]
+}']" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to post:\system\docrepository\sendsubmission:application\json:velo-sys-addrdocs-config" doc:id="dda2eb98-ee8a-41b7-8496-a4d382c4a714" name="put:\system\creditcheck:application\json:velo-sys-addrdocs-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Response not null" doc:id="6b33984f-c301-4341-bb2f-73b61a051807" expression="#[payload.RequestUUID]" is="#[MunitTools::equalTo('8f5d592b-8400-4191-a521-b03ae8e2fd0a')]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="velo-sys-addrdocs-test-suite-createNewCreaditEvaluation" description="MUnit Test" doc:id="1623ee80-8a2c-4e49-b461-2841ea586438" >
+	<munit:behavior >
+			<set-payload doc:name="Set Payload" doc:id="65a4d2d9-021a-486a-b5c6-29c65c7d7b1d" value='#[{
+  "Application": {
+	"ApplicationNumber": "000000000023111",
+    "ApplicationSource": "VELOOnline",
+    "ProductCode": "VPL",
+    "AmountRequested": "0",
+    "SecuredCardDepositAcctNum": "23232323",
+    "TsandCsCardAgreementInd": true,
+    "TsandCsDepositAgreementInd": true,
+    "TsandCsCardAgreementTimestamp": "2019-12-15T08:00:00",
+    "TsandCsDepositAgreementTimestamp": "2019-12-15T08:00:00",
+    "DoNotBankFlag": false,
+    "MailingAddressIndicator": false
+  },
+  "Applicant": {
+    "CxArrayIndex": 1,
+    "ApplicantType": "Primary",
+    "SSN": "666252876",
+    "DateofBirth": "1989-09-22",
+    "AnnualSalary": 95000,
+    "OtherIncome": 8000,
+    "MthlyHousingPymt": 7000,
+    "HousingStatus": "Own",
+    "OtherMthlyObligations": 6000,
+    "AnnualGrossIncome": 9000,
+    "DisposableMthlyIncome": 66,
+    "CISNumber": "12345",
+    "CISOldestActiveDPAcctOpenDate": "2010-02-01",
+    "CISAllDPAcctsTotalCurrentBalance": 9000,
+    "CISAllDPAcctsAverageBalance": 600,
+    "ADDR": [
+      {
+        "CxArrayIndex": 1,
+        "AddressType": "Home",
+        "HouseNumber": "13520",
+        "PreDirectional": "",
+        "StreetName": "Myrtle",
+        "StreetType": "none",
+        "PostDirectional": "",
+        "Unit": "none",
+        "City": "Chino",
+        "State": "CA",
+        "Country": "",
+        "Postcode": "91708",
+        "YearsAtAddress": 2,
+        "MonthsAtAddress": 4
+      }
+    ],
+    "CONT": [
+      {
+        "CxArrayIndex": 1,
+        "PhoneType": "Phone",
+        "PhoneNumber": "2323232323",
+        "EmailAddress": "none"
+      }
+    ],
+    "EMP": [
+      {
+        "CxArrayIndex": 1,
+        "Type": "Employed",
+        "Occupation": "SD",
+        "Name": "NameTest",
+        "AddressLine1": "Addr1",
+        "AddressLine2": "Addr2",
+        "City": "El Monte",
+        "State": "CA",
+        "Postcode": "91731",
+        "PhoneNumber": "2323232323",
+        "YearsWithEmployer": 4,
+        "MonthsWithEmployer": 5
+      }
+    ],
+    "IDNT": [
+      {
+        "CxArrayIndex": 1,
+        "IDType": "DriversLicense",
+        "IDDescription": "USCitizen",
+        "IDCountry": "USA",
+        "IDState": "CA",
+        "IDIssueDate": "2017-09-22T02:56:51.426Z",
+        "IDExpiration": "2020-09-22T02:56:51.426Z",
+        "IDNumber": "232323"
+      }
+    ],
+    "NME": [
+      {
+        "CxArrayIndex": 1,
+        "NameType": "",
+        "Title": "",
+        "FirstName": "MARIA",
+        "LastName": "GONZALEZ",
+        "MiddleName": "Mr",
+        "Suffix": "",
+        "MotherMaidenName": "Rai"
+      }
+    ],
+    "ASST": [
+      {
+        "CxArrayIndex": 1,
+        "AssetInstitutionName": "EWB",
+        "AssetAmount": 123450,
+        "AssetAccountType": "Checking"
+      }
+    ]
+  },
+  "RequestUUID": "6f5ff7fa-454f-4c36-b861-bef2c7823f30"
+}]'/>
+			<set-variable value="post" doc:name="Set HttpMethodVal" doc:id="bcf75e28-c4dd-43ba-bcb5-b769643a0ae8" variableName="httpmethodval" />
+			<munit-tools:mock-when doc:name="Mock OAuth Flow" doc:id="2fbf8fb9-b38a-401c-8911-dcf68e9cc407" processor="mule:flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute attributeName="doc:name" whereValue="oauth-token-cache-configFlow" />
+				</munit-tools:with-attributes>				
+				<munit-tools:then-return >
+					<munit-tools:variables >
+						<munit-tools:variable key="oauth_access_token" value="#['eyJraWQiOiJGSE1jTWJIUlpMd01QSXgweDlGM1lESDlUenVXdy1QNHJ6eFl6LTREc2xnIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULmlueExxUzV1bkRCcmFXQjF5S3ZaS0JIeGJ0X3ZxcndsLTcwd1JLQTJ0VzgiLCJpc3MiOiJodHRwczovL3Nzby10ZXN0LnZlbG9iYW5rLmNvbS9vYXV0aDIvYXVzZjJjMThxcXRtR0h5WDgwaDciLCJhdWQiOiJodHRwczovL2Rldm9wZW5hcGkudmVsb2JhbmsuY29tLyIsImlhdCI6MTU0NzgzNzU1MCwiZXhwIjoxNTQ3ODQxMTUwLCJjaWQiOiIwb2FmZ2s1cjM3aDFQVVJDRDBoNyIsInNjcCI6WyJhcGk6cmVhZCJdLCJzdWIiOiIwb2FmZ2s1cjM3aDFQVVJDRDBoNyJ9.EKuQKPvEN05H3leHH7MQb1-5o5tUlENzyxdPLfuTLzI189cx0fVzvmFAED8Bg-Yt4vAscmJ8w4jO0oX2QZM0pVxmHNDYAW-Me1PNcoLTKBzRZKk54ANPomM9xgc7jzyOXy8bzSV0-_IooiWXeY9lvGIn1adV6H3Q9Osc5xXzHRJe3PMR3_VchM5hwsqePrg1BFagcEVDlBQp5xWxYmgDqE55Ao1mwrGAFxEnCpVyMUQG4rNf8j_tLDagkUCRvK3LyUOZX4ITNo40fucHOtPRvBYl4eT3ay_A22HTQ-CL4oqzEzWJQsO7LYxfndq0lzhz2U4rSN7hfHpfYeceTKrgWg']" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock Create New CreaditEvaluation Request" doc:id="a9c2efd3-02dc-4503-a74d-a7149a80c56a" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="CreateCreditEvaluationRequest" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[{"Application": {"ApplicationNumber": "000000000023111","ApplicationCreationDate": "10/16/2019 12:00:00 AM","ApplicationCreationTime": "18:15:42:641","ApplicationUpdateDate": "10/16/2019 12:00:00 AM","ApplicationUpdateTime": "18:15:43:411","ApplicationStatus": "Declined","ServiceID": "NewCreditEvaluation","ProcessStage": "1","Version": "r1001","VersionDate": "9/19/2019 12:00:00 AM","ProductCode": "VPL","AmountRequested": "0.00","PreBRdmNbr1": "-1","PreBRdmNbr2": "-1","PreBRdmNbr3": "-1","PreBRdmNbr4": "-1","PreBRdmNbr5": "-1","PstBRdmNbr1": "-1","PstBRdmNbr2": "-1","PstBRdmNbr3": "-1","PstBRdmNbr4": "-1","PstBRdmNbr5": "-1","RequestID": "6f5ff7fa-454f-4c36-b861-bef2c7823f30","DecisionDate": "2019-10-16T00:00:00","DecisionTime": "18:15:43:406"},"Results": {"PrBR": {"PreBRdmNbr1": "977","PreBRdmNbr2": "759","PreBRdmNbr3": "944","PreBRdmNbr4": "518","PreBRdmNbr5": "351"},"PrBS": {"PreBPolicyDecSetter": {"PolicyDecisionText": "Declined","PolicyDecisionCategory": "Declined","PolicySortedRsnCodeTbl": [{"CxArrayIndex": 1,"Value": "P003"}]},"PreBEdition": {"PreBPolicyEditionNumber": "v1001","PreBPolicyEditionCreationDate": "2019-09-26T00:00:00","PreBPolicyEditionCreationTime": "18:06:00:00"}},"PsBR": null,"PsBS": null},"ErrorsERResponse": {"BPEPreBureauErrorCount": 0,"BPEPostBureauErrorCount": 0,"ERR": []},"BureauData": [],"Rds": [],"RequestUUID": "8f5d592b-8400-4191-a521-b03ae8e2fd0a","ErrorMessageList": null}]' />
+					<munit-tools:attributes value="#['{&quot;httpStatus&quot;: 200}']" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to createNewCreaditEvaluationeFlow" doc:id="e06a9b29-023f-471e-8501-ecb1f10171ad" name="createNewCreaditEvaluation"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Payload not null" doc:id="8b3f9afe-769a-45d3-aa31-ca1496ea87bb" expression="#[payload]" is="#[MunitTools::notNullValue()]" message="Failure"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="post:\system\creditcheck:application\json:velo-sys-addrdocs-configTest" description="MUnit Test" doc:id="59b127cb-39df-461b-8de9-4cfc7da26723" >
+	<munit:behavior >
+			<munit-tools:mock-when doc:name="Create New CreaditEvaluation Flow" doc:id="42c707c7-61a6-4706-8399-7bc4ed179330" processor="mule:flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="createNewCreaditEvaluation" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#['{
+  &quot;Application&quot;: {
+    &quot;ApplicationNumber&quot;: &quot;string&quot;,
+    &quot;ApplicationCreationDate&quot;: &quot;string&quot;,
+    &quot;ApplicationCreationTime&quot;: &quot;string&quot;,
+    &quot;ApplicationUpdateDate&quot;: &quot;string&quot;,
+    &quot;ApplicationUpdateTime&quot;: &quot;string&quot;,
+    &quot;ApplicationStatus&quot;: &quot;string&quot;,
+    &quot;ServiceID&quot;: &quot;string&quot;,
+    &quot;ProcessStage&quot;: &quot;string&quot;,
+    &quot;Version&quot;: &quot;string&quot;,
+    &quot;VersionDate&quot;: &quot;string&quot;,
+    &quot;ProductCode&quot;: &quot;string&quot;,
+    &quot;AmountRequested&quot;: &quot;string&quot;,
+    &quot;PreBRdmNbr1&quot;: &quot;string&quot;,
+    &quot;PreBRdmNbr2&quot;: &quot;string&quot;,
+    &quot;PreBRdmNbr3&quot;: &quot;string&quot;,
+    &quot;PreBRdmNbr4&quot;: &quot;string&quot;,
+    &quot;PreBRdmNbr5&quot;: &quot;string&quot;,
+    &quot;PstBRdmNbr1&quot;: &quot;string&quot;,
+    &quot;PstBRdmNbr2&quot;: &quot;string&quot;,
+    &quot;PstBRdmNbr3&quot;: &quot;string&quot;,
+    &quot;PstBRdmNbr4&quot;: &quot;string&quot;,
+    &quot;PstBRdmNbr5&quot;: &quot;string&quot;,
+    &quot;RequestID&quot;: &quot;string&quot;,
+    &quot;DecisionDate&quot;: &quot;2019-10-16T23:14:02.696Z&quot;,
+    &quot;DecisionTime&quot;: &quot;string&quot;
+  },
+  &quot;Results&quot;: {
+    &quot;PrBR&quot;: {
+      &quot;PreBRdmNbr1&quot;: &quot;string&quot;,
+      &quot;PreBRdmNbr2&quot;: &quot;string&quot;,
+      &quot;PreBRdmNbr3&quot;: &quot;string&quot;,
+      &quot;PreBRdmNbr4&quot;: &quot;string&quot;,
+      &quot;PreBRdmNbr5&quot;: &quot;string&quot;
+    },
+    &quot;PrBS&quot;: {
+      &quot;PreBPolicyDecSetter&quot;: {
+        &quot;PolicyDecisionText&quot;: &quot;string&quot;,
+        &quot;PolicyDecisionCategory&quot;: &quot;string&quot;,
+        &quot;PolicySortedRsnCodeTbl&quot;: [
+          {
+            &quot;CxArrayIndex&quot;: 0,
+            &quot;Value&quot;: &quot;string&quot;
+          }
+        ]
+      },
+      &quot;PreBEdition&quot;: {
+        &quot;PreBPolicyEditionNumber&quot;: &quot;string&quot;,
+        &quot;PreBPolicyEditionCreationDate&quot;: &quot;2019-10-16T23:14:02.696Z&quot;,
+        &quot;PreBPolicyEditionCreationTime&quot;: &quot;string&quot;
+      }
+    },
+    &quot;PsBR&quot;: {
+      &quot;PstBRdmNbr1&quot;: &quot;string&quot;,
+      &quot;PstBRdmNbr2&quot;: &quot;string&quot;,
+      &quot;PstBRdmNbr3&quot;: &quot;string&quot;,
+      &quot;PstBRdmNbr4&quot;: &quot;string&quot;,
+      &quot;PstBRdmNbr5&quot;: &quot;string&quot;,
+      &quot;App1RiskGrade&quot;: &quot;string&quot;,
+      &quot;App2RiskGrade&quot;: &quot;string&quot;,
+      &quot;AffordabilityLimitPct&quot;: &quot;string&quot;,
+      &quot;App1AffordabilityMonthlyPmt&quot;: &quot;string&quot;,
+      &quot;CreditLimit&quot;: &quot;string&quot;,
+      &quot;CLMinimumLimit&quot;: &quot;string&quot;,
+      &quot;CLMaximumLimit&quot;: &quot;string&quot;,
+      &quot;TermAPRPct&quot;: &quot;string&quot;,
+      &quot;TermMths&quot;: &quot;string&quot;,
+      &quot;DebtToIncome&quot;: 0,
+      &quot;DebtToIncomeWoMortgage&quot;: 0,
+      &quot;DebtToAssetMonthReserve&quot;: 0,
+      &quot;CreditCardLeverageRatio&quot;: 0,
+      &quot;NoScoreOrThinFileFlag&quot;: &quot;string&quot;,
+      &quot;UnderwritingSegment&quot;: 0,
+      &quot;EWBHighValueFlag&quot;: &quot;string&quot;,
+      &quot;FinalCreditLimit&quot;: 0,
+      &quot;CardBINNumber&quot;: &quot;string&quot;
+    },
+    &quot;PsBS&quot;: {
+      &quot;PstBApplicationPolicyDecSetter&quot;: {
+        &quot;PolicyDecisionText&quot;: &quot;string&quot;,
+        &quot;PolicyDecisionCategory&quot;: &quot;string&quot;,
+        &quot;PolicySortedRsnCodeTbl&quot;: [
+          {
+            &quot;CxArrayIndex&quot;: 0,
+            &quot;Value&quot;: &quot;string&quot;
+          }
+        ]
+      },
+      &quot;PstBApp1PolicyDecSetter&quot;: {
+        &quot;PolicyDecisionText&quot;: &quot;string&quot;,
+        &quot;PolicyDecisionCategory&quot;: &quot;string&quot;,
+        &quot;PolicySortedRsnCodeTbl&quot;: [
+          {
+            &quot;CxArrayIndex&quot;: 0,
+            &quot;Value&quot;: &quot;string&quot;
+          }
+        ]
+      },
+      &quot;PstBApp2PolicyDecSetter&quot;: {
+        &quot;PolicyDecisionText&quot;: &quot;string&quot;,
+        &quot;PolicyDecisionCategory&quot;: &quot;string&quot;,
+        &quot;PolicySortedRsnCodeTbl&quot;: [
+          {
+            &quot;CxArrayIndex&quot;: 0,
+            &quot;Value&quot;: &quot;string&quot;
+          }
+        ]
+      },
+      &quot;PstBEdition&quot;: {
+        &quot;PstBPolicyEditionNumber&quot;: &quot;string&quot;,
+        &quot;PstBPolicyEditionCreationDate&quot;: &quot;2019-10-16T23:14:02.697Z&quot;,
+        &quot;PstBPolicyEditionCreationTime&quot;: &quot;string&quot;
+      }
+    }
+  },
+  &quot;ErrorsERResponse&quot;: {
+    &quot;BPEPreBureauErrorCount&quot;: 0,
+    &quot;BPEPostBureauErrorCount&quot;: 0,
+    &quot;ERR&quot;: [
+      {
+        &quot;Code&quot;: &quot;string&quot;,
+        &quot;Message&quot;: &quot;string&quot;,
+        &quot;Source&quot;: &quot;string&quot;,
+        &quot;CxArrayIndex&quot;: 0
+      }
+    ]
+  },
+  &quot;BureauData&quot;: [
+    {
+      &quot;CxArrayIndex&quot;: 0,
+      &quot;BD&quot;: {
+        &quot;EXP&quot;: {
+          &quot;APP1&quot;: {
+            &quot;MLAIndicator&quot;: &quot;string&quot;,
+            &quot;Score&quot;: [
+              {
+                &quot;CxArrayIndex&quot;: 0,
+                &quot;Value&quot;: 0
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  &quot;Rds&quot;: [
+    {
+      &quot;Data&quot;: &quot;string&quot;,
+      &quot;OutputKey&quot;: &quot;string&quot;
+    }
+  ],
+  &quot;RequestUUID&quot;: &quot;8f5d592b-8400-4191-a521-b03ae8e2fd0a&quot;,
+  &quot;ErrorMessageList&quot;: [
+    {
+      &quot;ErrorMessageNumber&quot;: &quot;string&quot;,
+      &quot;ErrorMessageText&quot;: &quot;string&quot;
+    }
+  ]
+}']" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to post:\system\docrepository\sendsubmission:application\json:velo-sys-addrdocs-config" doc:id="3f35dcf0-5d28-4a2d-9ae5-d7f75a3d96fd" name="post:\system\creditcheck:application\json:velo-sys-addrdocs-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Response not null" doc:id="3030180b-df8b-45b0-9fec-979ac0be3ed3" expression="#[payload.RequestUUID]" is="#[MunitTools::equalTo('8f5d592b-8400-4191-a521-b03ae8e2fd0a')]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="velo-sys-addrdocs-test-suite-creditcheckStatusFlow" description="MUnit Test" doc:id="5870949d-a313-4f6a-88eb-f463c69a1514" >
+	<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Credit check Status Flow Request" doc:id="e5b06511-b2a1-453b-9f78-63f0391bc298" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="GET Credit Evaluation Status Request" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[{"EvaluationStatuses": [{"ApplicationNumber": "000000000053188","ApplicationStatus": "Declined","ApplicationStatusDate": "2020-01-24T17:48:04.7570000"}]}]' />
+					<munit-tools:attributes value="#['{&quot;httpStatus&quot;: 200,&quot;customernumber&quot;:&quot;00000084812&quot;}']" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="eb44eb34-7ab1-4119-b482-51779e1f6b7f">
+				<munit:attributes value="#[{httpStatus: 200, uriParams: {customernumber: '00000084812'}}]" />
+			</munit:set-event>
+			<set-variable value="get" doc:name="HttpMethodVal" doc:id="edde190d-ccf4-4416-b2b2-5314c692e027" variableName="httpmethodval" />
+			<flow-ref doc:name="Flow-ref to creditcheckStatusFlowFlow" doc:id="5f3270c5-c878-4d19-8ef6-f73914ea3d04" name="creditcheckStatusFlow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Payload not null" doc:id="e10d4801-c607-4f52-8d2c-612d5d72ba1c" expression="#[payload]" is="#[MunitTools::notNullValue()]" message="Failure"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="get:\system\creditcheck\evaluationstatus\(customernumber):velo-sys-addrdocs-configTest" description="MUnit Test" doc:id="d8a7d622-0972-4fd0-a128-0c54ef823ae9" >
+	<munit:behavior >
+			<munit:set-event doc:name="Set Event" doc:id="bb029c54-7172-4401-9497-e8c753a46142" >
+				<munit:attributes value="#['{&quot;httpStatus&quot;: 200,&quot;customernumber&quot;:&quot;00000084812&quot;}']" />
+			</munit:set-event>
+			<munit-tools:mock-when doc:name="credit checkS tatusFlow Flow" doc:id="e670d35c-3992-4792-8c60-4ad8db91a0ac" processor="mule:flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="creditcheckStatusFlow" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#['{
+    &quot;EvaluationStatuses&quot;: [
+        {
+            &quot;ApplicationNumber&quot;: &quot;000000000053188&quot;,
+            &quot;ApplicationStatus&quot;: &quot;Declined&quot;,
+            &quot;ApplicationStatusDate&quot;: &quot;2020-01-24T17:48:04.7570000&quot;
+        }
+    ]
+}']" mediaType="application/json" />
+					<munit-tools:attributes value="#['{&quot;httpStatus&quot;: 200,&quot;customernumber&quot;:&quot;00000084812&quot;}']" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="get:\system\creditcheck\evaluationstatus\(customernumber):velo-sys-addrdocs-config" doc:id="f4ea5fcb-189c-4fe6-8b3f-5a5ee8eb6458" name="get:\system\creditcheck\evaluationstatus\(customernumber):velo-sys-addrdocs-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Response not null" doc:id="4a79b490-07c2-4fc1-98b7-5ade65c44cde" expression="#[payload.EvaluationStatuses[0].ApplicationNumber]" is="#[MunitTools::equalTo('000000000053188')]"/>
+		</munit:validation>
+	</munit:test>
+</mule>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger"
+	xmlns:os="http://www.mulesoft.org/schema/mule/os"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd">
+	<os:object-store name="Object_store" doc:name="Object store" doc:id="246f93da-850b-490b-88fb-2eab4ac7a315" entryTtl="${oauth.expiry_duration_sec}" />
+	<http:request-config name="HTTP_Request_configuration_OAuth" doc:name="HTTP Request configuration" doc:id="5ae0e333-3962-482c-b1d3-ce0ef0ed2e77" >
+		<http:request-connection protocol="HTTPS" host="${oauth.host}" />
+	</http:request-config>
+	<flow name="oauth-token-cache-configFlow" doc:id="0569a22f-5367-49a8-9c24-8f9fba838909" >
+		<os:retrieve doc:name="Retrieve" doc:id="05d6f3f4-e0b0-4bda-968e-82511454927c" key="oauth-store-key" objectStore="Object_store" >
+			<os:default-value ><![CDATA[#['Empty']]]></os:default-value>
+		</os:retrieve>
+		<choice doc:name="Choice" doc:id="7cd4b260-401c-4529-932d-44ee9a95b936" >
+			<when expression="#[payload == 'Empty']" >
+				<set-variable value="${oauth.client_id}" doc:name="OAuth ClientId" doc:id="ef86244d-c0e8-4c28-9489-481b99eaa0f8" variableName="oauth_client_id" />
+				<set-variable value="${oauth.client_secret}" doc:name="OAuth ClientSecret" doc:id="c5a8ace3-4ca9-46cf-a225-6da5b35dec41" variableName="oauth_client_secret" />
+				<ee:transform doc:name="Transform OAuth Credentials" doc:id="6d395565-75d5-4887-b449-5d69ec147797">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/x-www-form-urlencoded
+---
+{
+	"grant_type" : "client_credentials",
+	"client_id" : vars.oauth_client_id,
+	"client_secret" : vars.oauth_client_secret
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+				<set-variable value='#[vars.httpmethodval ++ ":" ++ "https://${oauth.host}${oauth.path}"]' doc:name="endPointUrl" doc:id="2e8cb23c-faec-4a6b-aec4-177e330cff1d" variableName="endpointurl"/>
+				<json-logger:logger doc:name="Logger" doc:id="fac8e3ff-3c33-41ae-a270-fbf9a38b910b" config-ref="JSON_Logger_Config" priority="DEBUG" tracePoint="PRINT" endpoint='#[vars.endpointurl]' message="Request Log">
+					<json-logger:content ><![CDATA[#[output application/json ---
+{
+ 	payload:payload
+}]]]></json-logger:content>
+				</json-logger:logger>
+				<json-logger:logger doc:name="Logger" doc:id="fefa4ed5-85da-470b-83db-1b508e6bc7fd" tracePoint="BEFORE_REQUEST" endpoint='#[vars.endpointurl]' config-ref="JSON_Logger_Config" message="BEFORE_REQUEST"/>
+				<http:request method="POST" doc:name="OAuth Request" doc:id="4bb2e7c4-fc2f-4b3a-a419-b684b8a94a96" path="${oauth.path}" config-ref="HTTP_Request_configuration_OAuth">
+			<http:headers><![CDATA[#[output application/java
+---
+{
+	"Content-Type" : "application/x-www-form-urlencoded"
+}]]]></http:headers>
+		</http:request>
+				<json-logger:logger doc:name="Logger" doc:id="245b984a-e1cf-4b08-88ad-6b14929d3ec9" tracePoint="AFTER_REQUEST" endpoint='#[vars.endpointurl]' config-ref="JSON_Logger_Config" status="#[vars.'httpStatus']" message="AFTER_REQUEST"/>
+				<json-logger:logger doc:name="Logger" doc:id="f869afad-7d7a-4960-959e-8ac0ccf20694" config-ref="JSON_Logger_Config" priority="DEBUG" tracePoint="PRINT" endpoint='#[vars.endpointurl]' message="Response Log" status="#[vars.'httpStatus']">
+					<json-logger:content ><![CDATA[	
+#[output application/json ---
+{
+ 	payload:payload
+}]]]></json-logger:content>
+				</json-logger:logger>
+				<os:store doc:name="Store Access Token" doc:id="0035e3b9-2b1b-4b36-9bef-d9c69472d36b" key="oauth-store-key" objectStore="Object_store"/>
+				<ee:transform doc:name="Transform Message" doc:id="28060395-ceb5-4b58-afb7-8ade62fb136a" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+access_token: payload.access_token]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<otherwise >
+				<ee:transform doc:name="Transform Message" doc:id="e88b1d8b-b299-45a1-8595-c133ebf861e2">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+access_token: payload.access_token
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+			</otherwise>
+		</choice>
+		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="c085fb38-607b-4597-a06b-615d23b74c16" />
+	</flow>
+	
+
+</mule>
